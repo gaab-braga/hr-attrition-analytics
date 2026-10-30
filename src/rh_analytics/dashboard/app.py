@@ -35,7 +35,7 @@ from rh_analytics.people_science import (
 from rh_analytics.advanced_analysis import PeopleScienceAnalyzer, run_complete_analysis
 
 # ============================================================
-# PALETA DE CORES BB PREVIDÊNCIA
+# Paleta de cores
 # ============================================================
 COLORS = {
     'primary': '#005CA9',       # Azul BB

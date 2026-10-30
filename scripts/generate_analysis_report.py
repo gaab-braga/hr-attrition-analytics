@@ -14,7 +14,7 @@ from rh_analytics.cluster_analysis import ClusterAnalyzer
 
 
 # ============================================================
-# PALETA DE CORES BB PREVIDÊNCIA
+# Paleta de cores
 # ============================================================
 COLORS = {
     'primary': '#005CA9',
