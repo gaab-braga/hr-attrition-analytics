@@ -1,8 +1,4 @@
-"""
-Módulo de People Science
-Modelos estatísticos, regressão, correlação e previsões
-People Analytics Dashboard - BB Previdência
-"""
+"""Modelos de attrition: fatores de risco, correlações e probabilidade de saída."""
 
 import pandas as pd
 import numpy as np
@@ -10,10 +6,17 @@ from scipy import stats
 from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.model_selection import cross_val_score, train_test_split
-from sklearn.metrics import accuracy_score, roc_auc_score, classification_report
+from sklearn.model_selection import StratifiedKFold, cross_val_predict, cross_val_score
+from sklearn.pipeline import make_pipeline
 import warnings
 warnings.filterwarnings('ignore')
+
+CV = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
+
+def auc_validacao_cruzada(modelo, X, y):
+    """AUC em validação cruzada estratificada, com a padronização dentro de cada dobra."""
+    return cross_val_score(make_pipeline(StandardScaler(), modelo), X, y, cv=CV, scoring='roc_auc')
 
 
 def prepare_features(df):
@@ -63,26 +66,22 @@ def run_attrition_driver_analysis(df):
     X = df_model[feature_cols].fillna(0)
     y = df_model['Attrition_Binary']
     
-    # Normalizar features
+    # Base inteira só para ler coeficientes e importâncias; a nota do modelo vem da validação cruzada
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-    
+
     results = {}
-    
-    # Modelo 1: Regressão Logística (para interpretabilidade)
+
     log_reg = LogisticRegression(max_iter=1000, random_state=42)
-    log_reg.fit(X_scaled, y)
-    log_scores = cross_val_score(log_reg, X_scaled, y, cv=5, scoring='roc_auc')
-    
-    # Modelo 2: Random Forest (para importância de features)
     rf = RandomForestClassifier(n_estimators=100, random_state=42, max_depth=10)
-    rf.fit(X_scaled, y)
-    rf_scores = cross_val_score(rf, X_scaled, y, cv=5, scoring='roc_auc')
-    
-    # Modelo 3: Gradient Boosting
     gb = GradientBoostingClassifier(n_estimators=100, random_state=42, max_depth=5)
-    gb.fit(X_scaled, y)
-    gb_scores = cross_val_score(gb, X_scaled, y, cv=5, scoring='roc_auc')
+    for modelo in (log_reg, rf, gb):
+        modelo.fit(X_scaled, y)
+
+    # O scaler fica dentro do Pipeline para ser ajustado só nas dobras de treino
+    log_scores = auc_validacao_cruzada(LogisticRegression(max_iter=1000, random_state=42), X, y)
+    rf_scores = auc_validacao_cruzada(RandomForestClassifier(n_estimators=100, random_state=42, max_depth=10), X, y)
+    gb_scores = auc_validacao_cruzada(GradientBoostingClassifier(n_estimators=100, random_state=42, max_depth=5), X, y)
     
     # Nomes mais legíveis para features
     feature_names_readable = {
@@ -297,23 +296,16 @@ def predict_turnover(df, months=6):
     
     feature_cols = [col for col in feature_cols if col in df_model.columns]
     
-    # Treinar modelo no dataset completo (com labels conhecidos)
-    X_train = df_model[feature_cols].fillna(0)
-    y_train = df_model['Attrition_Binary']
-    
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    
-    # Modelo de previsão
-    model = GradientBoostingClassifier(n_estimators=100, random_state=42, max_depth=5)
-    model.fit(X_train_scaled, y_train)
-    
-    # Prever para colaboradores ativos
-    X_active = active_df[feature_cols].fillna(0)
-    X_active_scaled = scaler.transform(X_active)
-    
-    # Probabilidades de saída
-    probabilities = model.predict_proba(X_active_scaled)[:, 1]
+    X = df_model[feature_cols].fillna(0)
+    y = df_model['Attrition_Binary']
+    pipeline = make_pipeline(
+        StandardScaler(), GradientBoostingClassifier(n_estimators=100, random_state=42, max_depth=5)
+    )
+
+    # Os ativos também estão no treino. Para não prever alguém que o modelo já viu,
+    # cada probabilidade vem do modelo da dobra em que a pessoa ficou de fora.
+    prob_fora_da_dobra = cross_val_predict(pipeline, X, y, cv=CV, method='predict_proba')[:, 1]
+    probabilities = prob_fora_da_dobra[(df_model['Attrition'] == 'No').to_numpy()]
     active_df['Predicted_Turnover_Prob'] = probabilities
     active_df['Predicted_Turnover_Risk'] = pd.cut(
         probabilities, 
@@ -345,7 +337,7 @@ def predict_turnover(df, months=6):
             'expected_cost_monthly': expected_cost / months
         },
         'risk_distribution': active_df['Predicted_Turnover_Risk'].value_counts().to_dict(),
-        'model_accuracy': cross_val_score(model, X_train_scaled, y_train, cv=5, scoring='roc_auc').mean()
+        'model_auc': cross_val_score(pipeline, X, y, cv=CV, scoring='roc_auc').mean()
     }
     
     return results

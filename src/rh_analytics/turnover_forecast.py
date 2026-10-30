@@ -1,14 +1,11 @@
-"""
-Turnover Forecast - People Analytics
-Modelo de previsão temporal de turnover com projeções mensais
-"""
+"""Probabilidade de saída por colaborador e projeção mensal de turnover."""
 
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import StratifiedKFold, cross_val_predict, cross_val_score
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -91,9 +88,11 @@ class TurnoverForecaster:
             random_state=42
         )
         self.modelo.fit(X, y)
-        
-        # Calcular performance do modelo
-        self.cv_scores = cross_val_score(self.modelo, X, y, cv=5, scoring='roc_auc')
+
+        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+        self.cv_scores = cross_val_score(self.modelo, X, y, cv=cv, scoring='roc_auc')
+        # Probabilidade de cada pessoa vinda do modelo da dobra em que ela ficou de fora
+        self.prob_fora_da_dobra = cross_val_predict(self.modelo, X, y, cv=cv, method='predict_proba')[:, 1]
     
     def calcular_probabilidades_individuais(self) -> pd.DataFrame:
         """
@@ -105,8 +104,7 @@ class TurnoverForecaster:
         if self.modelo is None:
             return pd.DataFrame()
         
-        X = self.df[self.features].fillna(self.df[self.features].median())
-        probabilidades = self.modelo.predict_proba(X)[:, 1]
+        probabilidades = self.prob_fora_da_dobra
         
         resultado = self.df.copy()
         resultado['Probabilidade_Saida'] = probabilidades

@@ -1,8 +1,4 @@
-"""
-Análise Estatística Profunda - PROMPT 2
-Regressão Logística Interpretável, Odds Ratios, Intervalos de Confiança
-People Analytics Dashboard - BB Previdência
-"""
+"""Regressão logística para explicar o attrition: odds ratios, intervalos de confiança e p-valores."""
 
 import pandas as pd
 import numpy as np
@@ -10,7 +6,7 @@ from scipy import stats
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import cross_val_score, StratifiedKFold
-from sklearn.metrics import roc_auc_score, classification_report, confusion_matrix
+from sklearn.pipeline import make_pipeline
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -89,7 +85,10 @@ class StatisticalAnalyzer:
         
         # Cross-validation
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-        cv_scores = cross_val_score(self.model, X_scaled, y, cv=cv, scoring='roc_auc')
+        # A padronização entra no Pipeline para ser ajustada só nas dobras de treino
+        pipeline = make_pipeline(StandardScaler(), LogisticRegression(
+            penalty='l2', C=1.0, solver='lbfgs', max_iter=1000, random_state=42))
+        cv_scores = cross_val_score(pipeline, X, y, cv=cv, scoring='roc_auc')
         
         # Calcular odds ratios e intervalos de confiança
         coefficients = self.model.coef_[0]
@@ -177,7 +176,8 @@ class StatisticalAnalyzer:
                 'auc_mean': np.mean(cv_scores),
                 'auc_std': np.std(cv_scores),
                 'auc_scores': cv_scores.tolist(),
-                'accuracy': self.model.score(X_scaled, y),
+                'accuracy': cross_val_score(pipeline, X, y, cv=cv, scoring='accuracy').mean(),
+                'baseline_accuracy': 1 - y.mean(),  # acerto de quem diz que ninguém sai
                 'intercept': self.model.intercept_[0]
             },
             'sample_size': len(y),

@@ -609,7 +609,7 @@ def generate_statistical_section(stat_results):
             <div class="card">
                 <div class="card-title">Acurácia</div>
                 <div class="card-value">{perf.get('accuracy', 0):.1%}</div>
-                <div class="card-subtitle">No conjunto de treino</div>
+                <div class="card-subtitle">Validação cruzada; quem chuta "ninguém sai" acerta {perf.get('baseline_accuracy', 0):.1%}</div>
             </div>
             <div class="card">
                 <div class="card-title">Tamanho da Amostra</div>
