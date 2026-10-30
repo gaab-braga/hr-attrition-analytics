@@ -1,7 +1,4 @@
-"""
-People Analytics Dashboard - BB Previdência
-Interface principal Dash com visualizações interativas
-"""
+"""Aplicação Dash: layout, gráficos e callbacks do painel."""
 
 import dash
 from dash import dcc, html, callback, Input, Output, State
@@ -127,7 +124,7 @@ app = dash.Dash(
     suppress_callback_exceptions=True
 )
 
-app.title = "People Analytics | BB Previdência"
+app.title = "People Analytics"
 
 # ============================================================
 # FUNÇÕES AUXILIARES
@@ -506,13 +503,13 @@ def create_risk_matrix_chart():
     fig.add_vline(x=50, line_dash="dash", line_color=COLORS['gray'])
     
     # Anotações dos quadrantes
-    fig.add_annotation(x=75, y=80, text="⚠️ Stars at Risk", showarrow=False,
+    fig.add_annotation(x=75, y=80, text="Stars at Risk", showarrow=False,
                        font=dict(size=12, color=COLORS['danger']))
-    fig.add_annotation(x=25, y=80, text="⭐ Stars", showarrow=False,
+    fig.add_annotation(x=25, y=80, text="Stars", showarrow=False,
                        font=dict(size=12, color=COLORS['success']))
-    fig.add_annotation(x=75, y=30, text="📉 Monitor", showarrow=False,
+    fig.add_annotation(x=75, y=30, text="Monitor", showarrow=False,
                        font=dict(size=12, color=COLORS['warning']))
-    fig.add_annotation(x=25, y=30, text="✅ Sólidos", showarrow=False,
+    fig.add_annotation(x=25, y=30, text="Sólidos", showarrow=False,
                        font=dict(size=12, color=COLORS['primary']))
     
     fig.update_layout(
@@ -593,7 +590,7 @@ header = html.Div([
         html.Div([
             html.H1([
                 html.Span("People Analytics", style={'fontWeight': '700'}),
-                html.Span(" | BB Previdência", style={'fontWeight': '400', 'color': COLORS['accent']})
+                html.Span(" | IBM HR Analytics", style={'fontWeight': '400', 'color': COLORS['accent']})
             ], style={
                 'color': COLORS['white'],
                 'fontSize': '24px',
@@ -606,13 +603,13 @@ header = html.Div([
             })
         ]),
         html.Div([
-            html.Span("🏆", style={'fontSize': '20px', 'marginRight': '8px'}),
+            html.Span("", style={'fontSize': '20px', 'marginRight': '8px'}),
             html.Span(f"{metrics['total_employees']} colaboradores", style={
                 'color': COLORS['white'],
                 'marginRight': '20px',
                 'fontSize': '14px'
             }),
-            html.Span("📊", style={'fontSize': '20px', 'marginRight': '8px'}),
+            html.Span("", style={'fontSize': '20px', 'marginRight': '8px'}),
             html.Span(f"Turnover: {metrics['attrition_rate']:.1f}%", style={
                 'color': COLORS['accent'],
                 'fontWeight': '600',
@@ -640,12 +637,12 @@ header = html.Div([
 
 tabs = dcc.Tabs(
     [
-        dcc.Tab(label='📊 Dashboard Principal', value='dashboard', className='custom-tab', selected_className='custom-tab--selected'),
-        dcc.Tab(label='⚠️ Watchlist', value='watchlist', className='custom-tab', selected_className='custom-tab--selected'),
-        dcc.Tab(label='🔬 People Science', value='science', className='custom-tab', selected_className='custom-tab--selected'),
-        dcc.Tab(label='💡 Insights', value='insights', className='custom-tab', selected_className='custom-tab--selected'),
-        dcc.Tab(label='📋 Plano de Ação', value='action', className='custom-tab', selected_className='custom-tab--selected'),
-        dcc.Tab(label='👤 Perfil Ideal', value='profile', className='custom-tab', selected_className='custom-tab--selected'),
+        dcc.Tab(label='Dashboard Principal', value='dashboard', className='custom-tab', selected_className='custom-tab--selected'),
+        dcc.Tab(label='Watchlist', value='watchlist', className='custom-tab', selected_className='custom-tab--selected'),
+        dcc.Tab(label='People Science', value='science', className='custom-tab', selected_className='custom-tab--selected'),
+        dcc.Tab(label='Insights', value='insights', className='custom-tab', selected_className='custom-tab--selected'),
+        dcc.Tab(label='Plano de Ação', value='action', className='custom-tab', selected_className='custom-tab--selected'),
+        dcc.Tab(label='Perfil Ideal', value='profile', className='custom-tab', selected_className='custom-tab--selected'),
     ],
     id='tabs',
     value='dashboard',
@@ -681,7 +678,7 @@ def create_dashboard_tab():
                     })
                 ], md=8),
                 dbc.Col([
-                    html.H6("🚨 Alertas Prioritários", style={
+                    html.H6("Alertas Prioritários", style={
                         'color': COLORS['dark'],
                         'marginBottom': '16px',
                         'fontWeight': '600'
@@ -693,7 +690,7 @@ def create_dashboard_tab():
             # Health Scorecard
             dbc.Row([
                 dbc.Col([
-                    html.H6("📊 Health Scorecard - Indicadores de Saúde Organizacional", style={
+                    html.H6("Health Scorecard - Indicadores de Saúde Organizacional", style={
                         'color': COLORS['dark'],
                         'marginBottom': '16px',
                         'fontWeight': '600'
@@ -748,14 +745,14 @@ def create_dashboard_tab():
             dbc.Row([
                 dbc.Col([
                     create_chart_card(
-                        "📈 Tendência de Turnover",
+                        "Tendência de Turnover",
                         create_turnover_trend_chart(df, COLORS),
                         "360px"
                     )
                 ], md=6),
                 dbc.Col([
                     create_chart_card(
-                        "🎯 Quadrantes de Risco",
+                        "Quadrantes de Risco",
                         create_risk_quadrant_summary(df, COLORS),
                         "360px"
                     )
@@ -765,14 +762,14 @@ def create_dashboard_tab():
             dbc.Row([
                 dbc.Col([
                     create_chart_card(
-                        "🔥 Top Drivers de Turnover",
+                        "Top Drivers de Turnover",
                         create_top_drivers_compact(driver_analysis, COLORS),
                         "340px"
                     )
                 ], md=5),
                 dbc.Col([
                     create_chart_card(
-                        "🏢 Comparativo por Departamento",
+                        "Comparativo por Departamento",
                         create_department_comparison(df, COLORS),
                         "340px"
                     )
@@ -811,7 +808,7 @@ def create_watchlist_tab():
         dbc.Card([
             dbc.CardBody([
                 html.Div([
-                    html.H4("⚠️ Watchlist de Talentos Críticos", style={
+                    html.H4("Watchlist de Talentos Críticos", style={
                         'color': COLORS['dark'],
                         'marginBottom': '8px'
                     }),
@@ -1015,7 +1012,7 @@ def create_science_tab():
             dbc.Col([
                 dbc.Card([
                     dbc.CardBody([
-                        html.H6("📈 Performance dos Modelos", style={'color': COLORS['dark']}),
+                        html.H6("AUC em validação cruzada (5 dobras)", style={'color': COLORS['dark']}),
                         html.Div([
                             html.Div([
                                 html.P("Logistic Regression", style={'marginBottom': '4px', 'color': COLORS['gray']}),
@@ -1041,19 +1038,19 @@ def create_science_tab():
         # Gráficos de ciência
         dbc.Row([
             dbc.Col([
-                create_chart_card("🎯 Drivers de Turnover (Importância)", create_driver_importance_chart(), "450px")
+                create_chart_card("Drivers de Turnover (Importância)", create_driver_importance_chart(), "450px")
             ], md=6),
             dbc.Col([
-                create_chart_card("📊 Matriz de Correlações", create_correlation_heatmap(), "450px")
+                create_chart_card("Matriz de Correlações", create_correlation_heatmap(), "450px")
             ], md=6)
         ], className='mb-4'),
         
         dbc.Row([
             dbc.Col([
-                create_chart_card("📈 Curva de Sobrevivência (Retenção)", create_survival_curve(), "400px")
+                create_chart_card("Curva de Sobrevivência (Retenção)", create_survival_curve(), "400px")
             ], md=6),
             dbc.Col([
-                create_chart_card("🎯 Matriz de Risco (Flight Risk × Valor)", create_risk_matrix_chart(), "450px")
+                create_chart_card("Matriz de Risco (Flight Risk × Valor)", create_risk_matrix_chart(), "450px")
             ], md=6)
         ]),
         
@@ -1062,7 +1059,7 @@ def create_science_tab():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader([
-                        html.H6("🔬 Análise Difference-in-Differences: Impacto de Overtime", 
+                        html.H6("Turnover com e sem hora extra", 
                                style={'marginBottom': '0', 'color': COLORS['dark']})
                     ], style={'backgroundColor': COLORS['white'], 'border': 'none'}),
                     dbc.CardBody([
@@ -1099,7 +1096,7 @@ def create_insights_tab():
     insight_cards = []
     
     for i, insight in enumerate(insights[:8]):
-        icon = "💡" if insight['type'] == 'observation' else "⚠️" if insight['type'] == 'alert' else "✅"
+        icon = "" if insight['type'] == 'observation' else "" if insight['type'] == 'alert' else ""
         color = COLORS['primary'] if insight['type'] == 'observation' else COLORS['warning'] if insight['type'] == 'alert' else COLORS['success']
         
         insight_cards.append(
@@ -1141,7 +1138,7 @@ def create_insights_tab():
     return html.Div([
         dbc.Row([
             dbc.Col([
-                html.H4("💡 Insights Gerados Automaticamente", style={
+                html.H4("Insights Gerados Automaticamente", style={
                     'color': COLORS['dark'],
                     'marginBottom': '8px'
                 }),
@@ -1216,7 +1213,7 @@ def create_action_tab():
     return html.Div([
         dbc.Row([
             dbc.Col([
-                html.H4("📋 Plano de Ação Recomendado", style={
+                html.H4("Plano de Ação Recomendado", style={
                     'color': COLORS['dark'],
                     'marginBottom': '8px'
                 }),
@@ -1237,7 +1234,7 @@ def create_profile_tab():
     return html.Div([
         dbc.Row([
             dbc.Col([
-                html.H4("👤 Perfil Ideal do Colaborador Engajado", style={
+                html.H4("Perfil Ideal do Colaborador Engajado", style={
                     'color': COLORS['dark'],
                     'marginBottom': '8px'
                 }),
@@ -1252,7 +1249,7 @@ def create_profile_tab():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader([
-                        html.H6("📊 Métricas do Perfil Ideal", style={'marginBottom': '0'})
+                        html.H6("Métricas do Perfil Ideal", style={'marginBottom': '0'})
                     ], style={'backgroundColor': COLORS['white'], 'border': 'none'}),
                     dbc.CardBody([
                         dbc.Row([
@@ -1294,7 +1291,7 @@ def create_profile_tab():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader([
-                        html.H6("🎯 Características-Chave", style={'marginBottom': '0'})
+                        html.H6("Características-Chave", style={'marginBottom': '0'})
                     ], style={'backgroundColor': COLORS['white'], 'border': 'none'}),
                     dbc.CardBody([
                         html.Ul([
@@ -1330,12 +1327,12 @@ def create_profile_tab():
             dbc.Col([
                 dbc.Card([
                     dbc.CardHeader([
-                        html.H6("💡 Recomendações de Contratação e Retenção", style={'marginBottom': '0'})
+                        html.H6("Recomendações de Contratação e Retenção", style={'marginBottom': '0'})
                     ], style={'backgroundColor': COLORS['white'], 'border': 'none'}),
                     dbc.CardBody([
                         dbc.Row([
                             dbc.Col([
-                                html.H6("🎯 Contratação", style={'color': COLORS['primary'], 'marginBottom': '12px'}),
+                                html.H6("Contratação", style={'color': COLORS['primary'], 'marginBottom': '12px'}),
                                 html.Ul([
                                     html.Li("Priorizar candidatos com perfil de work-life balance"),
                                     html.Li("Avaliar fit cultural durante entrevistas"),
@@ -1344,7 +1341,7 @@ def create_profile_tab():
                                 ], style={'fontSize': '14px', 'color': COLORS['gray']})
                             ], md=4),
                             dbc.Col([
-                                html.H6("🔄 Onboarding", style={'color': COLORS['success'], 'marginBottom': '12px'}),
+                                html.H6("Onboarding", style={'color': COLORS['success'], 'marginBottom': '12px'}),
                                 html.Ul([
                                     html.Li("Programa de mentoria nos primeiros 6 meses"),
                                     html.Li("Definir expectativas claras de carreira"),
@@ -1353,7 +1350,7 @@ def create_profile_tab():
                                 ], style={'fontSize': '14px', 'color': COLORS['gray']})
                             ], md=4),
                             dbc.Col([
-                                html.H6("⭐ Retenção", style={'color': COLORS['warning'], 'marginBottom': '12px'}),
+                                html.H6("Retenção", style={'color': COLORS['warning'], 'marginBottom': '12px'}),
                                 html.Ul([
                                     html.Li("Política clara de promoções (máx 3 anos)"),
                                     html.Li("Limitar overtime a casos excepcionais"),
@@ -1384,7 +1381,7 @@ app.layout = html.Div([
     html.Footer([
         html.Div([
             html.P([
-                "People Analytics Dashboard | BB Previdência © 2024 | ",
+                "People Analytics · base pública IBM HR Analytics | ",
                 html.Span("Desenvolvido com Dash & Plotly", style={'color': COLORS['accent']})
             ], style={
                 'color': 'rgba(255,255,255,0.7)',
@@ -1434,14 +1431,14 @@ def render_tab_content(tab):
 
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print("🚀 People Analytics Dashboard - BB Previdência")
+    print("People Analytics Dashboard")
     print("="*60)
-    print(f"📊 Total de colaboradores: {metrics['total_employees']}")
-    print(f"📈 Taxa de Turnover: {metrics['attrition_rate']:.1f}%")
-    print(f"⚠️  Colaboradores em Alto Risco: {metrics['high_risk_count']}")
-    print(f"💰 Custo em Risco: R$ {metrics['cost_at_risk']:,.0f}")
+    print(f"Total de colaboradores: {metrics['total_employees']}")
+    print(f"Taxa de Turnover: {metrics['attrition_rate']:.1f}%")
+    print(f" Colaboradores em Alto Risco: {metrics['high_risk_count']}")
+    print(f"Custo em Risco: R$ {metrics['cost_at_risk']:,.0f}")
     print("="*60)
-    print("\n🌐 Acesse: http://127.0.0.1:8050")
+    print("\nAcesse: http://127.0.0.1:8050")
     print("\n")
     
     app.run(debug=True, port=8050)

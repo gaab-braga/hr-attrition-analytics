@@ -1,8 +1,4 @@
-"""
-Gerador de Relatório de Análise Estatística - PROMPT 2
-Relatório HTML completo com todas as análises
-People Analytics Dashboard - BB Previdência
-"""
+"""Gera o relatório HTML da análise estatística em reports/."""
 
 import pandas as pd
 import numpy as np
@@ -40,11 +36,11 @@ def generate_html_report(output_path=RELATORIOS / 'relatorio_analise_estatistica
     Gera relatório HTML completo com todas as análises estatísticas
     """
     print("=" * 60)
-    print("📊 GERANDO RELATÓRIO DE ANÁLISE ESTATÍSTICA")
+    print("GERANDO RELATÓRIO DE ANÁLISE ESTATÍSTICA")
     print("=" * 60)
     
     # Carregar dados
-    print("\n📁 Carregando dados...")
+    print("\nCarregando dados...")
     csv_path = DADOS
     df = load_and_process_data(csv_path)
     metrics = get_summary_metrics(df)
@@ -56,20 +52,20 @@ def generate_html_report(output_path=RELATORIOS / 'relatorio_analise_estatistica
     metrics['cost_at_risk'] = metrics['total_attrition_cost']
     
     # Executar análises
-    print("\n📈 Executando Análise Estatística...")
+    print("\nExecutando Análise Estatística...")
     stat_analyzer = StatisticalAnalyzer(df)
     stat_results = stat_analyzer.run_all_analyses()
     
-    print("\n📉 Executando Análise de Sobrevivência...")
+    print("\nExecutando Análise de Sobrevivência...")
     surv_analyzer = SurvivalAnalyzer(df)
     surv_results = surv_analyzer.run_all_analyses()
     
-    print("\n🎯 Executando Análise de Clusters...")
+    print("\nExecutando Análise de Clusters...")
     cluster_analyzer = ClusterAnalyzer(df)
     cluster_results = cluster_analyzer.run_all_analyses(n_clusters=4)
     
     # Gerar HTML
-    print("\n📝 Gerando relatório HTML...")
+    print("\nGerando relatório HTML...")
     
     html_content = f"""
 <!DOCTYPE html>
@@ -77,7 +73,7 @@ def generate_html_report(output_path=RELATORIOS / 'relatorio_analise_estatistica
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análise Estatística Profunda | People Analytics | BB Previdência</title>
+    <title>Análise Estatística Profunda | People Analytics</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         {get_css_styles()}
@@ -107,8 +103,8 @@ def generate_html_report(output_path=RELATORIOS / 'relatorio_analise_estatistica
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-    print(f"\n✅ Relatório gerado com sucesso: {output_path}")
-    print(f"📄 Tamanho: {os.path.getsize(output_path) / 1024:.1f} KB")
+    print(f"\nRelatório gerado com sucesso: {output_path}")
+    print(f"Tamanho: {os.path.getsize(output_path) / 1024:.1f} KB")
     
     return output_path
 
@@ -421,8 +417,8 @@ def generate_header(metrics):
     return f"""
     <header class="header">
         <div class="container">
-            <h1>📊 Análise Estatística Profunda</h1>
-            <p class="subtitle">People Analytics | BB Previdência</p>
+            <h1>Análise Estatística Profunda</h1>
+            <p class="subtitle">People Analytics</p>
             
             <div class="header-meta">
                 <div class="header-meta-item">
@@ -460,7 +456,7 @@ def generate_executive_summary(stat_results, surv_results, cluster_results, metr
             top = sig_coefs[0]
             findings_html += f"""
             <div class="finding">
-                <div class="finding-title">🎯 Principal Driver de Turnover</div>
+                <div class="finding-title">Principal Driver de Turnover</div>
                 <div class="finding-text">
                     <strong>{top['variable']}</strong> é o fator mais significativo 
                     (Odds Ratio = {top['odds_ratio']:.2f}, p-value = {top['p_value']:.4f}).
@@ -475,7 +471,7 @@ def generate_executive_summary(stat_results, surv_results, cluster_results, metr
         if summary.get('highest_risk_year'):
             findings_html += f"""
             <div class="finding">
-                <div class="finding-title">📉 Período Crítico de Retenção</div>
+                <div class="finding-title">Período Crítico de Retenção</div>
                 <div class="finding-text">
                     O <strong>ano {summary['highest_risk_year']}</strong> apresenta a maior taxa de risco 
                     ({summary['highest_risk_rate']:.1%}). 
@@ -489,7 +485,7 @@ def generate_executive_summary(stat_results, surv_results, cluster_results, metr
         summary = cluster_results['summary']
         findings_html += f"""
         <div class="finding">
-            <div class="finding-title">🎯 Segmentação de Colaboradores</div>
+            <div class="finding-title">Segmentação de Colaboradores</div>
             <div class="finding-text">
                 Identificados <strong>{summary['n_clusters']} clusters</strong> distintos.
                 Cluster de maior risco: <strong>{summary.get('highest_risk_cluster', 'N/A')}</strong> 
@@ -516,7 +512,7 @@ def generate_executive_summary(stat_results, surv_results, cluster_results, metr
     
     return f"""
     <section class="section">
-        <h2 class="section-title"><span class="emoji">📋</span> Resumo Executivo</h2>
+        <h2 class="section-title"><span class="emoji"></span> Resumo Executivo</h2>
         
         <p style="color: var(--gray); margin-bottom: 24px;">
             Este relatório apresenta uma análise estatística profunda dos dados de People Analytics,
@@ -598,7 +594,7 @@ def generate_statistical_section(stat_results):
     
     return f"""
     <section class="section">
-        <h2 class="section-title"><span class="emoji">📈</span> Análise Estatística - Regressão Logística</h2>
+        <h2 class="section-title"><span class="emoji"></span> Análise Estatística - Regressão Logística</h2>
         
         <div class="card-grid">
             <div class="card success">
@@ -737,7 +733,7 @@ def generate_survival_section(surv_results):
     
     return f"""
     <section class="section">
-        <h2 class="section-title"><span class="emoji">📉</span> Análise de Sobrevivência (Kaplan-Meier)</h2>
+        <h2 class="section-title"><span class="emoji"></span> Análise de Sobrevivência (Kaplan-Meier)</h2>
         
         <div class="card-grid">
             <div class="card">
@@ -885,7 +881,7 @@ def generate_cluster_section(cluster_results):
     
     return f"""
     <section class="section">
-        <h2 class="section-title"><span class="emoji">🎯</span> Análise de Clusters (K-Means)</h2>
+        <h2 class="section-title"><span class="emoji"></span> Análise de Clusters (K-Means)</h2>
         
         <div class="card-grid">
             <div class="card">
@@ -939,7 +935,7 @@ def generate_methodology_section():
     """Gera seção de metodologia"""
     return """
     <section class="section">
-        <h2 class="section-title"><span class="emoji">📚</span> Metodologia</h2>
+        <h2 class="section-title"><span class="emoji"></span> Metodologia</h2>
         
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
             <div>
@@ -989,7 +985,7 @@ def generate_footer():
     return f"""
     <footer class="footer">
         <div class="container">
-            <p>People Analytics | BB Previdência © {datetime.now().year}</p>
+            <p>People Analytics · base IBM HR Analytics</p>
             <p>Relatório gerado em {datetime.now().strftime('%d/%m/%Y às %H:%M')}</p>
         </div>
     </footer>

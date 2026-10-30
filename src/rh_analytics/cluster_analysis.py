@@ -1,8 +1,4 @@
-"""
-Análise de Clusters - PROMPT 2
-Segmentação K-Means, Perfis de Clusters, Silhouette Score
-People Analytics Dashboard - BB Previdência
-"""
+"""Segmentação dos colaboradores com K-Means, escolha de k pelo silhouette e perfil de cada grupo."""
 
 import pandas as pd
 import numpy as np
@@ -230,28 +226,28 @@ class ClusterAnalyzer:
         high_overtime = profile.get('overtime_pct', 0) > 40
         
         if high_risk and low_satisfaction:
-            name = "⚠️ Em Risco"
+            name = "Em Risco"
             description = "Colaboradores insatisfeitos com alto risco de saída. Atenção imediata necessária."
         elif senior and high_engagement and not high_risk:
-            name = "⭐ Veteranos Engajados"
+            name = "Veteranos Engajados"
             description = "Colaboradores experientes e comprometidos. Potenciais mentores e líderes."
         elif junior and high_risk:
-            name = "🔄 Novatos Instáveis"
+            name = "Novatos Instáveis"
             description = "Colaboradores recentes com sinais de desengajamento. Fortalecer onboarding."
         elif high_income and not high_risk:
-            name = "💎 Talentos Premium"
+            name = "Talentos Premium"
             description = "Colaboradores bem remunerados e estáveis. Proteger investimento."
         elif high_engagement and not high_risk:
-            name = "💪 Alta Performance"
+            name = "Alta Performance"
             description = "Colaboradores engajados e produtivos. Desenvolver para liderança."
         elif high_overtime:
-            name = "🔥 Sobrecarregados"
+            name = "Sobrecarregados"
             description = "Alta carga de trabalho. Monitorar burnout e redistribuir demandas."
         elif low_satisfaction and not high_risk:
-            name = "😐 Silenciosos"
+            name = "Silenciosos"
             description = "Baixa satisfação mas não saíram ainda. Investigar causas."
         else:
-            name = "✅ Base Sólida"
+            name = "Base Sólida"
             description = "Colaboradores estáveis com métricas moderadas. Manter engajamento."
         
         return name, description

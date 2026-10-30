@@ -1,7 +1,4 @@
-"""
-Funções executivas para o Dashboard Principal melhorado
-Inclui: Sumário Executivo, Alertas Críticos, Health Scorecard e gráficos estratégicos
-"""
+"""Componentes da aba executiva: resumo, alertas, scorecard e comparação entre departamentos."""
 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -23,10 +20,10 @@ def create_alert_card(title, message, severity="warning", action_text=None, COLO
         }
     
     icons = {
-        'critical': ('🚨', COLORS['danger']),
-        'warning': ('⚠️', COLORS['warning']),
+        'critical': ('', COLORS['danger']),
+        'warning': ('', COLORS['warning']),
         'info': ('ℹ️', COLORS['info']),
-        'success': ('✅', COLORS['success'])
+        'success': ('', COLORS['success'])
     }
     
     icon, color = icons.get(severity, icons['info'])
@@ -72,7 +69,7 @@ def create_executive_summary_card(df, metrics, driver_analysis, COLORS):
     )
     
     summary_html = html.Div([
-        html.H5("📊 Sumário Executivo", style={'color': COLORS['dark'], 'marginBottom': '16px'}),
+        html.H5("Sumário Executivo", style={'color': COLORS['dark'], 'marginBottom': '16px'}),
         
         # Status geral
         html.Div([
@@ -117,7 +114,7 @@ def create_executive_summary_card(df, metrics, driver_analysis, COLORS):
         
         # Recomendação executiva
         html.Div([
-            html.P("💡 Recomendação Executiva:", style={
+            html.P("Recomendação Executiva:", style={
                 'fontWeight': '700',
                 'color': COLORS['primary'],
                 'marginBottom': '8px'

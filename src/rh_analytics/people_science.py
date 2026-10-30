@@ -155,10 +155,7 @@ def run_attrition_driver_analysis(df):
 
 
 def analyze_overtime_impact(df):
-    """
-    Análise Difference-in-Differences para OverTime
-    Compara grupos com e sem hora extra
-    """
+    """Compara quem faz e quem não faz hora extra em turnover, risco e satisfação (teste t e d de Cohen)."""
     # Grupos
     overtime_yes = df[df['OverTime'] == 'Yes']
     overtime_no = df[df['OverTime'] == 'No']

@@ -1,8 +1,4 @@
-"""
-Módulo de Análises Avançadas de People Analytics
-Análise de Sobrevivência, Simulações What-If, Análises Segmentadas
-People Analytics Dashboard - BB Previdência
-"""
+"""Análises complementares usadas no dashboard: segmentos, sobrevivência simplificada e cenários."""
 
 import pandas as pd
 import numpy as np

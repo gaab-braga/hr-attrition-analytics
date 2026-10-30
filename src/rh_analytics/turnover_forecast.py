@@ -395,12 +395,12 @@ if __name__ == "__main__":
     # Gerar resumo
     resumo = forecaster.gerar_resumo_previsao()
     
-    print("\n📊 PROJEÇÃO ANUAL:")
+    print("\nPROJEÇÃO ANUAL:")
     print("-"*60)
     for k, v in resumo['resumo_anual'].items():
         print(f"   {k}: {v}")
     
-    print("\n📅 PROJEÇÃO TRIMESTRAL:")
+    print("\nPROJEÇÃO TRIMESTRAL:")
     print("-"*60)
     for trim, dados in resumo['projecao_trimestral'].items():
         print(f"\n   {trim}:")
@@ -408,19 +408,19 @@ if __name__ == "__main__":
         print(f"      Custo projetado: {dados['custo_projetado']}")
         print(f"      Departamentos críticos: {dados['departamentos_criticos']}")
     
-    print("\n🎯 TOP 10 PRÓXIMAS SAÍDAS PROVÁVEIS:")
+    print("\nTOP 10 PRÓXIMAS SAÍDAS PROVÁVEIS:")
     print("-"*60)
     proximas = forecaster.identificar_proximas_saidas(10)
     if not proximas.empty:
         print(proximas.to_string())
     
-    print("\n📈 MÉTRICAS DO MODELO:")
+    print("\nMÉTRICAS DO MODELO:")
     print("-"*60)
     for k, v in resumo['metricas_modelo'].items():
         print(f"   {k}: {v}")
     
     # Cenário com intervenção
-    print("\n🔮 CENÁRIO COM INTERVENÇÃO (20% redução de risco):")
+    print("\nCENÁRIO COM INTERVENÇÃO (20% redução de risco):")
     print("-"*60)
     cenario = forecaster.projetar_cenario_com_intervencao(0.2)
     print(f"   Cenário Atual: {cenario['cenario_atual']['saidas_anuais']} saídas ({cenario['cenario_atual']['custo_anual']})")

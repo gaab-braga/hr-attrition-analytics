@@ -1,8 +1,4 @@
-"""
-Análise de Sobrevivência - PROMPT 2
-Kaplan-Meier, Hazard Rates, Curvas de Retenção por Segmento
-People Analytics Dashboard - BB Previdência
-"""
+"""Análise de sobrevivência: curvas de Kaplan-Meier e taxa de saída por tempo de casa e por segmento."""
 
 import pandas as pd
 import numpy as np

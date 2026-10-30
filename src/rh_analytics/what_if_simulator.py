@@ -1,7 +1,4 @@
-"""
-What-If Simulator para People Analytics
-Simulações de cenários e projeções de impacto de intervenções de RH
-"""
+"""Simulador de cenários: muda uma variável (promoção, hora extra, salário...) e recalcula a probabilidade de saída."""
 
 import pandas as pd
 import numpy as np
@@ -46,6 +43,10 @@ class WhatIfSimulator:
             modelo: Modelo treinado para prever attrition (opcional)
         """
         self.df = df.copy()
+        # Os cenários multiplicam essas colunas por fatores; no pandas 3, int não aceita float no lugar
+        for coluna in ('MonthlyIncome', 'Flight_Risk_Score'):
+            if coluna in self.df.columns:
+                self.df[coluna] = self.df[coluna].astype(float)
         self.modelo = modelo
         self._preparar_dados()
         
@@ -521,17 +522,17 @@ class WhatIfSimulator:
             lp = low_performance.iloc[row_idx] if len(low_performance) > row_idx else False
             
             if hp and hr:
-                return ('🔴 Reter a Todo Custo', 'One-on-one, Promoção Acelerada, Retenção', 'Imediata (7 dias)')
+                return ('Reter a Todo Custo', 'One-on-one, Promoção Acelerada, Retenção', 'Imediata (7 dias)')
             elif not hp and le:
-                return ('🟠 Desenvolver', 'PDI, Mentoria, Novos Desafios', '30 dias')
+                return ('Desenvolver', 'PDI, Mentoria, Novos Desafios', '30 dias')
             elif lp and hs:
-                return ('🟡 Monitorar', 'PIP, Realocação, Avaliação', '60 dias')
+                return ('Monitorar', 'PIP, Realocação, Avaliação', '60 dias')
             elif hp and not hr:
-                return ('🟢 Celebrar', 'Reconhecimento, Carreira, Retenção', 'Ongoing')
+                return ('Celebrar', 'Reconhecimento, Carreira, Retenção', 'Ongoing')
             elif lp and hr:
-                return ('⚪ Investigar', 'Diagnóstico, Fit Cultural', '15 dias')
+                return ('Investigar', 'Diagnóstico, Fit Cultural', '15 dias')
             else:
-                return ('🔵 Acompanhar', 'Monitoramento Regular', '90 dias')
+                return ('Acompanhar', 'Monitoramento Regular', '90 dias')
         
         resultados = [classificar(i) for i in range(len(df))]
         
@@ -618,11 +619,11 @@ if __name__ == "__main__":
     # Executar todos os cenários
     resumo = simulator.gerar_resumo_cenarios()
     
-    print("\n📊 CENÁRIOS DE SIMULAÇÃO:")
+    print("\nCENÁRIOS DE SIMULAÇÃO:")
     print("-"*60)
     
     for cenario in resumo['cenarios']:
-        print(f"\n🎯 {cenario['nome']}")
+        print(f"\n{cenario['nome']}")
         print(f"   Descrição: {cenario['descricao']}")
         print(f"   Colaboradores impactados: {cenario['colaboradores_impactados']}")
         print(f"   Redução de Turnover: {cenario['reducao_turnover']}")
@@ -632,7 +633,7 @@ if __name__ == "__main__":
         print(f"   Payback: {cenario['payback']}")
     
     print("\n" + "="*60)
-    print("📈 RESUMO CONSOLIDADO:")
+    print("RESUMO CONSOLIDADO:")
     print("-"*60)
     print(f"   Total Investimento: {resumo['resumo']['total_investimento']}")
     print(f"   Total Economia Potencial: {resumo['resumo']['total_economia_potencial']}")
@@ -642,7 +643,7 @@ if __name__ == "__main__":
     
     # Gerar matriz de decisão
     print("\n" + "="*60)
-    print("📋 MATRIZ DE DECISÃO (amostra):")
+    print("MATRIZ DE DECISÃO (amostra):")
     print("-"*60)
     matriz = simulator.gerar_matriz_decisao()
     print(matriz.groupby('Quadrante').size().sort_values(ascending=False))

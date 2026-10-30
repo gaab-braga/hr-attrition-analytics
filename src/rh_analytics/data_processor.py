@@ -1,8 +1,4 @@
-"""
-Módulo de carregamento e processamento de dados
-People Analytics & Talent Intelligence Dashboard
-Inspirado no projeto de Marketing Science para BB Previdência
-"""
+"""Carga do CSV e colunas derivadas (risco de saída, engajamento, custo), métricas e insights do painel."""
 
 import pandas as pd
 import numpy as np
@@ -395,7 +391,7 @@ def generate_insights(df, metrics):
         'title': 'Visão Geral da Organização',
         'description': f"A organização possui {metrics['total_employees']} colaboradores, com uma taxa de turnover de {metrics['turnover_rate']:.1f}%. "
                        f"O custo total de attrition foi de R$ {metrics['total_attrition_cost']:,.0f}.",
-        'icon': '📊',
+        'icon': '',
         'priority': 'info',
         'recommendation': 'Monitorar as métricas e priorizar quick wins para redução de turnover.'
     })
@@ -407,7 +403,7 @@ def generate_insights(df, metrics):
         'title': 'eNPS e Engajamento',
         'description': f"O eNPS estimado é de {metrics['enps']:.0f} ({enps_status}). "
                        f"Existem {metrics['promoters']} promotores e {metrics['detractors']} detratores.",
-        'icon': '💚' if metrics['enps'] > 0 else '🔴',
+        'icon': '' if metrics['enps'] > 0 else '',
         'priority': 'high' if metrics['enps'] < 0 else 'medium',
         'recommendation': 'Melhorar iniciativas de engajamento e medir impacto em ciclos trimestrais.'
     })
@@ -417,9 +413,9 @@ def generate_insights(df, metrics):
         insights.append({
             'type': 'Talentos Críticos',
             'title': 'Talentos Críticos em Risco',
-            'description': f"⚠️ ALERTA: {metrics['high_potential_at_risk']} colaboradores de alta performance estão em risco de saída. "
+            'description': f"ALERTA: {metrics['high_potential_at_risk']} colaboradores de alta performance estão em risco de saída. "
                            f"Isso representa uma potencial perda de capital intelectual crítico.",
-            'icon': '🚨',
+            'icon': '',
             'priority': 'critical',
             'recommendation': 'Configurar medidas imediatas de retenção para talentos críticos (one-on-one, retenção salarial, plano de carreira).'
         })
@@ -431,7 +427,7 @@ def generate_insights(df, metrics):
             'title': 'Risco de Burnout e Overtime',
             'description': f"{metrics['burnout_risk_count']} colaboradores apresentam alto risco de burnout "
                            f"(overtime + baixo work-life balance). {metrics['overtime_pct']:.1f}% do time faz hora extra regularmente.",
-            'icon': '🔥',
+            'icon': '',
             'priority': 'high',
             'recommendation': 'Reduzir horas extras e revisar políticas de carga de trabalho.'
         })
@@ -444,7 +440,7 @@ def generate_insights(df, metrics):
             'title': 'Salários abaixo do mercado',
             'description': f"{metrics['below_market_count']} colaboradores ({pct_below:.1f}%) estão com salário abaixo da média do cargo. "
                            f"Isso pode estar contribuindo para o flight risk.",
-            'icon': '💰',
+            'icon': '',
             'priority': 'medium',
             'recommendation': 'Considerar revisão salarial para cargos sensíveis; priorizar posições críticas.'
         })
@@ -456,7 +452,7 @@ def generate_insights(df, metrics):
             'title': 'Tempo sem promoção',
             'description': f"O tempo médio sem promoção é de {metrics['avg_years_since_promotion']:.1f} anos. "
                            f"Estagnação de carreira é um dos principais drivers de turnover.",
-            'icon': '📈',
+            'icon': '',
             'priority': 'medium',
             'recommendation': 'Criar planos de carreira e metas de promoção anuais.'
         })
@@ -484,7 +480,7 @@ def generate_action_plan(df, metrics, patterns):
             'expected_impact': f'{(potential_savings/estimated_cost):.1f}x',
             'timeline': '6-12 meses',
             'owner': 'People Team',
-            'icon': '🔴'
+            'icon': ''
         })
     
     # Ação 2: Programa anti-overtime
@@ -499,7 +495,7 @@ def generate_action_plan(df, metrics, patterns):
             'expected_impact': '2.5x',
             'timeline': '3-6 meses',
             'owner': 'People Team & Managers',
-            'icon': '🟠'
+            'icon': ''
         })
     
     # Ação 3: Programa de carreira para estagnados
@@ -514,7 +510,7 @@ def generate_action_plan(df, metrics, patterns):
             'expected_impact': '2.8x',
             'timeline': '6-12 meses',
             'owner': 'People Team',
-            'icon': '🟠'
+            'icon': ''
         })
     
     # Ação 4: Onboarding para novos
@@ -529,7 +525,7 @@ def generate_action_plan(df, metrics, patterns):
             'expected_impact': '1.8x',
             'timeline': '3-6 meses',
             'owner': 'People Team',
-            'icon': '🟡'
+            'icon': ''
         })
     
     return actions

@@ -1,6 +1,4 @@
-"""
-Small runner to launch dashboard on 0.0.0.0 for network access and debug disabled
-"""
+"""Sobe o dashboard em 0.0.0.0, sem modo debug, para acessar de outro aparelho na rede."""
 from rh_analytics.dashboard.app import app
 import argparse
 import webbrowser

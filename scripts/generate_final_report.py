@@ -1,8 +1,4 @@
-"""
-Gerador de Relatório Executivo Final - PROMPT 3
-Consolida análises (estatística, survival, clustering), forecast e simulações What-If
-Gera arquivo HTML executivo `relatorio_executivo_final.html` com narrativa, recomendações e ROI
-"""
+"""Gera o relatório executivo em HTML (análises, previsão e cenários) em reports/."""
 
 import os
 import pandas as pd
@@ -152,7 +148,7 @@ def create_executive_findings(stat_results, surv_results, cluster_results, what_
 
 def generate_html_final_report(output_path=OUTPUT_PATH):
     print('='*60)
-    print('📋 Gerando Relatório Executivo Final...')
+    print('Gerando Relatório Executivo Final...')
     print('='*60)
 
     df = load_and_process_data(CSV_PATH)
@@ -185,7 +181,7 @@ def generate_html_final_report(output_path=OUTPUT_PATH):
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Relatório Executivo - People Analytics | BB Previdência</title>
+    <title>Relatório Executivo - People Analytics</title>
     <style>
         {get_css_styles()}
     </style>
@@ -339,8 +335,8 @@ def generate_html_final_report(output_path=OUTPUT_PATH):
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html)
 
-    print(f"\n✅ Relatório executivo final gerado: {output_path}")
-    print(f"📄 Tamanho: {os.path.getsize(output_path) / 1024:.1f} KB")
+    print(f"\nRelatório executivo final gerado: {output_path}")
+    print(f"Tamanho: {os.path.getsize(output_path) / 1024:.1f} KB")
 
     return output_path
 
