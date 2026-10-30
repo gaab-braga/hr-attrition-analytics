@@ -605,7 +605,8 @@ class WhatIfSimulator:
 # Teste do módulo
 if __name__ == "__main__":
     # Carregar dados
-    df = pd.read_csv('WA_Fn-UseC_-HR-Employee-Attrition.csv')
+    from rh_analytics.paths import DADOS
+    df = pd.read_csv(DADOS)
     
     print("="*60)
     print("WHAT-IF SIMULATOR - PEOPLE ANALYTICS")

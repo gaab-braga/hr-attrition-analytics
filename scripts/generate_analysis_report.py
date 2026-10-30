@@ -10,10 +10,11 @@ from datetime import datetime
 import os
 
 # Módulos internos
-from data_processor import load_and_process_data, get_summary_metrics
-from statistical_analysis import StatisticalAnalyzer
-from survival_analysis import SurvivalAnalyzer
-from cluster_analysis import ClusterAnalyzer
+from rh_analytics.paths import DADOS, RELATORIOS
+from rh_analytics.data_processor import load_and_process_data, get_summary_metrics
+from rh_analytics.statistical_analysis import StatisticalAnalyzer
+from rh_analytics.survival_analysis import SurvivalAnalyzer
+from rh_analytics.cluster_analysis import ClusterAnalyzer
 
 
 # ============================================================
@@ -34,7 +35,7 @@ COLORS = {
 }
 
 
-def generate_html_report(output_path='relatorio_analise_estatistica.html'):
+def generate_html_report(output_path=RELATORIOS / 'relatorio_analise_estatistica.html'):
     """
     Gera relatório HTML completo com todas as análises estatísticas
     """
@@ -44,7 +45,7 @@ def generate_html_report(output_path='relatorio_analise_estatistica.html'):
     
     # Carregar dados
     print("\n📁 Carregando dados...")
-    csv_path = 'WA_Fn-UseC_-HR-Employee-Attrition.csv'
+    csv_path = DADOS
     df = load_and_process_data(csv_path)
     metrics = get_summary_metrics(df)
     

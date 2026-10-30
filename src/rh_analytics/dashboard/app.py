@@ -13,9 +13,7 @@ import os
 import pandas as pd
 import numpy as np
 
-# Importações do dashboard_executive_functions (novo dashboard)
-try:
-    from dashboard_executive_functions import (
+from rh_analytics.dashboard.executive import (
         create_executive_summary_card,
         create_critical_alerts_section,
         create_health_scorecard,
@@ -24,29 +22,20 @@ try:
         create_top_drivers_compact,
         create_department_comparison
     )
-except ModuleNotFoundError:
-    from .dashboard_executive_functions import (
-        create_executive_summary_card,
-        create_critical_alerts_section,
-        create_health_scorecard,
-        create_turnover_trend_chart,
-        create_risk_quadrant_summary,
-        create_top_drivers_compact,
-        create_department_comparison
-    )
+from rh_analytics.paths import DADOS
 
 # Módulos internos
-from data_processor import (
+from rh_analytics.data_processor import (
     load_and_process_data, get_summary_metrics, identify_critical_talents,
     analyze_attrition_patterns, generate_insights, generate_action_plan,
     get_ideal_employee_profile
 )
-from people_science import (
+from rh_analytics.people_science import (
     run_attrition_driver_analysis, analyze_overtime_impact,
     analyze_correlations, predict_turnover, scenario_analysis,
     generate_science_summary
 )
-from advanced_analysis import PeopleScienceAnalyzer, run_complete_analysis
+from rh_analytics.advanced_analysis import PeopleScienceAnalyzer, run_complete_analysis
 
 # ============================================================
 # PALETA DE CORES BB PREVIDÊNCIA
@@ -79,7 +68,7 @@ CHART_COLORS = [
 # ============================================================
 # CARREGAR E PROCESSAR DADOS
 # ============================================================
-CSV_PATH = 'WA_Fn-UseC_-HR-Employee-Attrition.csv'
+CSV_PATH = DADOS
 print("Carregando dados...")
 df = load_and_process_data(CSV_PATH)
 metrics = get_summary_metrics(df)

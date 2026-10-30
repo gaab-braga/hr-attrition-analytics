@@ -10,16 +10,17 @@ from datetime import datetime
 
 # Reusar gerador de analis estatística (estilos e seções) para manter consistência visual
 from generate_analysis_report import get_css_styles, generate_header, generate_methodology_section, generate_footer
-from data_processor import load_and_process_data, get_summary_metrics
-from statistical_analysis import StatisticalAnalyzer
-from survival_analysis import SurvivalAnalyzer
-from cluster_analysis import ClusterAnalyzer
-from what_if_simulator import WhatIfSimulator
-from turnover_forecast import TurnoverForecaster
+from rh_analytics.paths import DADOS, RELATORIOS
+from rh_analytics.data_processor import load_and_process_data, get_summary_metrics
+from rh_analytics.statistical_analysis import StatisticalAnalyzer
+from rh_analytics.survival_analysis import SurvivalAnalyzer
+from rh_analytics.cluster_analysis import ClusterAnalyzer
+from rh_analytics.what_if_simulator import WhatIfSimulator
+from rh_analytics.turnover_forecast import TurnoverForecaster
 
 
-OUTPUT_PATH = 'relatorio_executivo_final.html'
-CSV_PATH = 'WA_Fn-UseC_-HR-Employee-Attrition.csv'
+OUTPUT_PATH = RELATORIOS / 'relatorio_executivo_final.html'
+CSV_PATH = DADOS
 
 
 def create_executive_findings(stat_results, surv_results, cluster_results, what_if_summary, forecast_summary, metrics):

@@ -1,5 +1,5 @@
 # Test script to import dashboard and call tab creation functions
-from dashboard import create_insights_tab, create_action_tab, create_profile_tab
+from rh_analytics.dashboard.app import create_insights_tab, create_action_tab, create_profile_tab
 
 if __name__ == '__main__':
     print('Testing insight tab...')

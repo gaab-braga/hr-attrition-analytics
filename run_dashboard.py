@@ -1,7 +1,7 @@
 """
 Small runner to launch dashboard on 0.0.0.0 for network access and debug disabled
 """
-from dashboard import app
+from rh_analytics.dashboard.app import app
 import argparse
 import webbrowser
 import socket
